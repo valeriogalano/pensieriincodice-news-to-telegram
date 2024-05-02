@@ -12,11 +12,11 @@ logger = logging.getLogger("telegram")
 
 class TelegramHelper:
     token = None
-    chat_id = None
+    chat_ids = None
 
     def __init__(self):
         self.token = os.environ["TELEGRAM_BOT_API_KEY"]
-        self.chat_id = os.environ["TELEGRAM_CHAT_ID"]
+        self.chat_ids = os.environ["TELEGRAM_CHAT_IDS"].split(",")
 
         logger.debug("Telegram helper inizializzato!")
 
@@ -46,4 +46,5 @@ class TelegramHelper:
         return response
 
     def send(self, message):
-        self.__send_telegram_message(message, self.chat_id)
+        for chat_id in self.chat_ids:
+            self.__send_telegram_message(message, chat_id)

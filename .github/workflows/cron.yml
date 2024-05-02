@@ -29,7 +29,8 @@ jobs:
       - name: execute py script
         env:
           TELEGRAM_BOT_API_KEY: ${{ secrets.TELEGRAM_BOT_API_KEY }}
-          TELEGRAM_CHAT_ID: ${{ vars.TELEGRAM_CHAT_ID }}
+          TELEGRAM_CHAT_IDS: ${{ vars.TELEGRAM_CHAT_IDS }}
+          TELEGRAM_MESSAGE_TEMPLATE: ${{ vars.TELEGRAM_MESSAGE_TEMPLATE }}
           READWISE_ACCESS_TOKEN: ${{ secrets.READWISE_ACCESS_TOKEN }}
         run: python main.py
 
