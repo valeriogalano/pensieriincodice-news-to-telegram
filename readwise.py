@@ -32,7 +32,7 @@ class Readwise:
         to_return = []
 
         for document in response["results"]:
-            if 'published' in document["tags"]:
+            if 'publish' in document["tags"].keys():
                 to_return.append(document)
 
         return to_return

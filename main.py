@@ -50,7 +50,7 @@ def main():
 
     tg = TelegramHelper()
     for document in to_publish:
-        message = f"Nuovo documento pubblicato: {document['url']}"
+        message = f"Nuovo documento pubblicato: {document['source_url']}"
         tg.send(message)
         published_documents.append(document['id'])
 
