@@ -16,7 +16,7 @@ class TelegramHelper:
 
     def __init__(self):
         self.token = os.environ["TELEGRAM_BOT_API_KEY"]
-        self.chat_ids = os.environ["TELEGRAM_CHAT_ID"]
+        self.chat_id = os.environ["TELEGRAM_CHAT_ID"]
 
         logger.debug("Telegram helper inizializzato!")
 
