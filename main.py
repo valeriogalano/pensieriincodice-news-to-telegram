@@ -1,10 +1,10 @@
 import logging
+import os
 import pickle
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from readwise import Readwise
 from telegram_helper import TelegramHelper
-
 
 logging.basicConfig(level=logging.DEBUG)
 logging.getLogger("main").setLevel(logging.DEBUG)
@@ -28,9 +28,10 @@ def save_pickle(published_documents):
 
 def main():
     midnight_date = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    seven_days_ago = midnight_date - timedelta(days=7)
 
     rw = Readwise()
-    response = rw.get_published_documents(midnight_date.isoformat())
+    response = rw.get_published_documents(seven_days_ago.isoformat())
 
     if len(response) == 0:
         logging.debug("Nessun documento con tag 'published' trovato.")
@@ -50,7 +51,12 @@ def main():
 
     tg = TelegramHelper()
     for document in to_publish:
-        message = f"#news\n{document['source_url']}"
+        template_message = os.environ["TELEGRAM_MESSAGE_TEMPLATE"]
+        message = template_message.format(
+                      title=document['title'],
+                      link=document['source_url'],
+                      notes=document['notes']
+                  )
         tg.send(message)
         published_documents.append(document['id'])
 
