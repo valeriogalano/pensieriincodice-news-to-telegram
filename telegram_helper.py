@@ -33,7 +33,7 @@ class TelegramHelper:
         data_dict = {
             'chat_id': chat_id,
             'text': message,
-            'parse_mode': 'HTML',
+            'parse_mode': 'MarkdownV2',
             'disable_notification': True
         }
         data = json.dumps(data_dict)
