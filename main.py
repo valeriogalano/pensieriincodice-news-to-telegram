@@ -62,8 +62,11 @@ def main():
                       link=document['source_url'],
                       notes=document['notes']
                   )
-        tg.send(message)
-        published_documents.append(document['id'])
+        try:
+            tg.send(message)
+            published_documents.append(document['id'])
+        except Exception as e:
+            logging.error(e)
 
     dump_file(published_documents)
 

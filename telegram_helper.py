@@ -43,6 +43,10 @@ class TelegramHelper:
             headers=headers,
             verify=False
         )
+
+        if response.status_code != 200:
+            raise Exception(f"Error sending message: {response.text}")
+
         return response
 
     def send(self, message):
