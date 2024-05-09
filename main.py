@@ -61,9 +61,9 @@ def main():
         logging.debug("Note: " + document['notes'])
         template_message = os.environ["TELEGRAM_MESSAGE_TEMPLATE"]
         message = template_message.format(
-                      title=document['title'].replace(".", "\.").replace("(", "\(").replace(")", "\)").replace("=","\="),  # Escape special characters
+                      title=document['title'].replace(".", "\.").replace("(", "\(").replace(")", "\)").replace("=","\=").replace("_", "\_"),  # Escape special characters
                       link=document['source_url'],
-                      notes=document['notes'].replace(".", "\.").replace("(", "\(").replace(")", "\)").replace("=","\=")  # Escape special characters
+                      notes=document['notes'].replace(".", "\.").replace("(", "\(").replace(")", "\)").replace("=","\=").replace("_", "\_")  # Escape special characters
                   )
         try:
             tg.send(message)
