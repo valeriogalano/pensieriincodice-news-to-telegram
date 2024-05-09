@@ -1,6 +1,6 @@
+import json
 import logging
 import os
-import pickle
 from datetime import datetime, timedelta
 
 from readwise import Readwise
@@ -10,20 +10,25 @@ logging.basicConfig(level=logging.DEBUG)
 logging.getLogger("main").setLevel(logging.DEBUG)
 
 
-def open_pickle():
+def load_file():
     try:
-        with open('readwise.pkl', 'rb') as f:
-            published_documents = pickle.load(f)
+        with open('readwise.json', 'rb') as f:
+            json_string = f.read()
+            published_documents = json.loads(json_string)
     except FileNotFoundError:
-        logging.debug("File 'readwise.pkl' non trovato.")
+        logging.debug("File 'readwise.json' non trovato.")
         published_documents = []
 
     return published_documents
 
 
-def save_pickle(published_documents):
-    with open('readwise.pkl', 'wb') as f:
-        pickle.dump(published_documents, f)
+def dump_file(published_documents):
+    with open('readwise.json', 'wb') as f:
+        json_string = json.dumps(
+            published_documents,
+            indent=4
+        )
+        f.write(json_string.encode())
 
 
 def main():
@@ -37,7 +42,7 @@ def main():
         logging.debug("Nessun documento con tag 'published' trovato.")
         return
 
-    published_documents = open_pickle()
+    published_documents = load_file()
 
     to_publish = []
     for document in response:
@@ -60,7 +65,7 @@ def main():
         tg.send(message)
         published_documents.append(document['id'])
 
-    save_pickle(published_documents)
+    dump_file(published_documents)
 
     logging.debug("Bye!")
 
