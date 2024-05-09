@@ -56,6 +56,7 @@ def main():
 
     tg = TelegramHelper()
     for document in to_publish:
+        logging.debug("Pubblicazione articolo " + document['title'])
         template_message = os.environ["TELEGRAM_MESSAGE_TEMPLATE"]
         message = template_message.format(
                       title=document['title'],
