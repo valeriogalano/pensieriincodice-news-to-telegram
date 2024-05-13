@@ -31,6 +31,31 @@ def dump_file(published_documents):
         f.write(json_string.encode())
 
 
+def escape_string(text_to_escape):
+    translate_table = str.maketrans({
+        '_': r'\_',
+        '*': r'\*',
+        '[': r'\[',
+        ']': r'\]',
+        '(': r'\(',
+        ')': r'\)',
+        '~': r'\~',
+        '`': r'\`',
+        '>': r'\>',
+        '#': r'\#',
+        '+': r'\+',
+        '-': r'\-',
+        '=': r'\=',
+        '|': r'\|',
+        '{': r'\{',
+        '}': r'\}',
+        '.': r'\.',
+        '!': r'\!'
+    })
+
+    return text_to_escape.translate(translate_table)
+
+
 def main():
     midnight_date = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
     seven_days_ago = midnight_date - timedelta(days=7)
@@ -61,9 +86,9 @@ def main():
         logging.debug("Note: " + document['notes'])
         template_message = os.environ["TELEGRAM_MESSAGE_TEMPLATE"]
         message = template_message.format(
-                      title=document['title'].replace(".", "\.").replace("(", "\(").replace(")", "\)").replace("=","\=").replace("_", "\_"),  # Escape special characters
+                      title=escape_string(document['title']),
                       link=document['source_url'],
-                      notes=document['notes'].replace(".", "\.").replace("(", "\(").replace(")", "\)").replace("=","\=").replace("_", "\_")  # Escape special characters
+                      notes=escape_string(document['notes'])
                   )
         try:
             tg.send(message)
