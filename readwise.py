@@ -15,6 +15,7 @@ class Readwise:
 
     def get_published_documents(self, updated_after):
         response = self.get_documents(updated_after)
+        logger.debug(f"Documenti da pubblicare: {response}")
         return self.__filter_tags(response)
 
     def get_documents(self, updated_after):
