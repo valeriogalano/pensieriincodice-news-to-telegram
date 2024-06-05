@@ -33,6 +33,9 @@ class Readwise:
         to_return = []
 
         for document in response["results"]:
+            if document["tags"] is None:
+                continue
+
             if 'publish' in document["tags"].keys():
                 to_return.append(document)
 
