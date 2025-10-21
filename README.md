@@ -18,6 +18,49 @@
 
 ---
 
+## Installazione in locale
+
+Per installare il progetto in locale, è necessario avere Python 3.11 installato.
+
+### Variabili di ambiente
+
+Imposta nel tuo IDE o sul suo sistema operativo le seguenti variabili di ambiente:
+
+```
+TELEGRAM_BOT_API_KEY="<TELEGRAM_BOT_API_KEY_HERE>"
+TELEGRAM_CHAT_IDS="<TELEGRAM_CHAT_IDS_HERE>"
+TELEGRAM_MESSAGE_TEMPLATE="<TELEGRAM_MESSAGE_TEMPLATE>"
+READWISE_ACCESS_TOKEN="<READWISE_ACCESS_TOKEN>"
+```
+
+- `TELEGRAM_BOT_API_KEY`: token del bot Telegram
+- `TELEGRAM_CHAT_IDS`: i chat ID dei gruppi Telegram separati da una virgola
+- `TELEGRAM_MESSAGE_TEMPLATE`: template del messaggio
+- `READWISE_ACCESS_TOKEN`: token di accesso di Readwise
+
+La variabile `TELEGRAM_MESSAGE_TEMPLATE` deve contenere i seguenti placeholder:
+
+- `{title}`: il titolo dell'articolo
+- `{notes}`: le note dell'articolo
+- `{link}`: il link dell'articolo
+
+Esempio:
+"{title}\n{notes}\n\n{link}"
+
+### Installazione dei requisiti
+
+```bash
+pip install -r requirements.txt
+```
+
+Puoi eseguire `main.py` per verificare il funzionamento dello script.
+
+```bash
+python main.py
+```
+
+---
+
 ## Contributi
 
 Se noti qualche problema o hai suggerimenti per migliorare l'organizzazione, sentiti libero di aprire una **Issue**
