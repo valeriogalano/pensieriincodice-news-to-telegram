@@ -93,10 +93,11 @@ def main():
     try:
         tg.send(message)
         published_documents.append(document['id'])
+        dump_file(published_documents)
     except Exception as e:
-        logging.error(e)
-
-    dump_file(published_documents)
+        # Re-raise to ensure a non-zero exit code so the GitHub Action fails
+        logging.error("Errore durante l'invio del messaggio su Telegram: %s", e)
+        raise
 
     logging.debug("Bye!")
 
