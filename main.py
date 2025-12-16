@@ -58,12 +58,11 @@ def escape_string(text_to_escape):
 
 
 def __clean_url(url: str) -> str:
-    """Remove ALL query parameters and fragments from the URL.
+    """Remove common tracking parameters from the query string.
 
-    Rationale: Telegram MarkdownV2 is very strict about special characters.
-    Query strings often contain characters like parentheses and tildes which
-    lead to parsing errors. The user prefers to drop tracking (and any other)
-    parameters entirely, keeping only the canonical scheme://host/path.
+    Keeps the URL structure intact while stripping known tracking params
+    such as utm_*, fbclid, gclid, and a few others commonly found in
+    newsletter links.
     """
     try:
         parsed = urlparse(url)
@@ -71,8 +70,23 @@ def __clean_url(url: str) -> str:
         # If parsing fails, return the original URL unchanged
         return url
 
-    # Strip query and fragment completely
-    cleaned = parsed._replace(query='', fragment='')
+    # Blocklist of query parameter names to drop
+    blocked_exact = {
+        'fbclid', 'gclid', 'igshid', 'mc_cid', 'mc_eid', 'ck_subscriber_id',
+        'sh_kit', 'ref_src', 'ref', 'oly_enc_id', 'oly_anon_id'
+    }
+
+    # Preserve only params not in blocklist and not starting with utm_
+    filtered_params = []
+    for k, v in parse_qsl(parsed.query, keep_blank_values=True):
+        if k.lower().startswith('utm_'):
+            continue
+        if k in blocked_exact:
+            continue
+        filtered_params.append((k, v))
+
+    new_query = urlencode(filtered_params, doseq=True)
+    cleaned = parsed._replace(query=new_query)
     return urlunparse(cleaned)
 
 
@@ -129,7 +143,7 @@ def main():
     logging.debug("Link: " + document['source_url'])
     logging.debug("Note: " + document['notes'])
     template_message = os.environ["TELEGRAM_MESSAGE_TEMPLATE"]
-    link_value = make_markdown_link(document['source_url'], label="Consulta la fonte")
+    link_value = make_markdown_link(document['source_url'])
     message = template_message.format(
                   title=escape_string(document['title']),
                   link=link_value,
